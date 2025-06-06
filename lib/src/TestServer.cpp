@@ -53,7 +53,7 @@ void TestServer::setCommandExecuter(CommandExecuter* exec)
     m_cmdExec = exec;
 }
 
-void TestServer::setGenericCommandHandler(std::function<void(std::string, std::string)> handler)
+void TestServer::setGenericCommandHandler(std::function<std::string(std::string, std::string)> handler)
 {
     m_handler = handler;
 }
@@ -103,10 +103,19 @@ void TestServer::mouseDropUrls(ItemPath path, const std::vector<std::string>& ur
     m_cmdExec->enqueueCommand<cmd::DropFromExt>(path, makePasteboardContentWithUrls(urls));
 }
 
-void TestServer::genericCommand(std::string command, std::string payload)
+std::string TestServer::genericCommand(std::string command, std::string payload)
 {
-    m_cmdExec->enqueueCommand<cmd::CustomCmd>(
-        [=](spix::CommandEnvironment&) { m_handler(command, payload); }, []() { return true; });
+    std::promise<std::string> promise;
+    auto result = promise.get_future();
+
+    auto cmd = std::make_unique<cmd::CustomCmd>([=, &promise](spix::CommandEnvironment&) { 
+        std::string result = m_handler(command, payload);
+        promise.set_value(result);
+    }, []() { return true; });
+
+    m_cmdExec->enqueueCommand(std::move(cmd));
+
+    return result.get();
 }
 
 void TestServer::inputText(ItemPath path, std::string text)
