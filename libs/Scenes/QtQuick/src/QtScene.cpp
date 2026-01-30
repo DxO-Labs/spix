@@ -95,4 +95,28 @@ std::string QtScene::takeScreenshotAsBase64(const ItemPath& targetItem)
     return byteArray.toBase64().toStdString();
 }
 
+Color QtScene::colorAtPoint(const ItemPath& targetItem, int x, int y)
+{
+    auto item = qt::GetQQuickItemAtPath(targetItem);
+    if (!item) {
+        return Color(-1, -1, -1);
+    }
+
+    // take screenshot of the full window
+    auto windowImage = item->window()->grabWindow();
+
+    // get the rect of the item in window space in pixels, account for the device pixel ratio
+    QRectF imageCropRectItemSpace {0, 0, item->width(), item->height()};
+    auto imageCropRectF = item->mapRectToScene(imageCropRectItemSpace);
+    QRect imageCropRect(imageCropRectF.x() * windowImage.devicePixelRatio(),
+        imageCropRectF.y() * windowImage.devicePixelRatio(), imageCropRectF.width() * windowImage.devicePixelRatio(),
+        imageCropRectF.height() * windowImage.devicePixelRatio());
+
+    // crop the window image to the item rect
+    auto image = windowImage.copy(imageCropRect);
+
+    auto pixelColor = image.pixelColor(QPoint(x, y));
+    return Color(pixelColor.red(), pixelColor.green(), pixelColor.blue());
+}
+
 } // namespace spix

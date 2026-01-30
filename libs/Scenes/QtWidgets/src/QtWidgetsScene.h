@@ -30,6 +30,7 @@ public:
     // Tasks
     void takeScreenshot(const ItemPath& targetItem, const std::string& filePath) override;
     std::string takeScreenshotAsBase64(const ItemPath& targetItem) override;
+    Color colorAtPoint(const ItemPath& targetItem, int x, int y) override;
 
 private:
     QtWidgetsEvents m_events;

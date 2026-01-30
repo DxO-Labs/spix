@@ -26,6 +26,8 @@ public:
     // Tasks
     void takeScreenshot(const ItemPath& targetItem, const std::string& filePath) override;
     std::string takeScreenshotAsBase64(const ItemPath& targetItem) override;
+    Color colorAtPoint(const ItemPath& targetItem, int x, int y) override;
+
     // Mock stuff
     void addItemAtPath(MockItem item, const ItemPath& path);
     MockEvents& mockEvents();

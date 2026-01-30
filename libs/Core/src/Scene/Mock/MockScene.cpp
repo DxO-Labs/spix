@@ -33,6 +33,11 @@ std::string MockScene::takeScreenshotAsBase64(const ItemPath&)
     return "Base64 String";
 }
 
+Color MockScene::colorAtPoint(const ItemPath&, int, int)
+{
+    return Color(0, 0, 0);
+}
+
 void MockScene::addItemAtPath(MockItem item, const ItemPath& path)
 {
     m_items.emplace(std::make_pair(path.string(), std::move(item)));

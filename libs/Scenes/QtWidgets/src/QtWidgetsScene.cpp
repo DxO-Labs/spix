@@ -14,6 +14,7 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
+#include <QImage>
 #include <QObject>
 #include <QPixmap>
 #include <QWidget>
@@ -65,6 +66,21 @@ std::string QtWidgetsScene::takeScreenshotAsBase64(const ItemPath& targetItem)
     buffer.close();
 
     return byteArray.toBase64().toStdString();
+}
+
+Color QtWidgetsScene::colorAtPoint(const ItemPath& targetItem, int x, int y)
+{
+    auto widget = qt::GetQWidgetAtPath(targetItem);
+    if (!widget) {
+        return Color(-1, -1, -1);
+    }
+
+    // QWidget::grab() captures the widget directly
+    QPixmap pixmap = widget->grab();
+    QImage image = pixmap.toImage();
+
+    auto pixelColor = image.pixelColor(QPoint(x, y));
+    return Color(pixelColor.red(), pixelColor.green(), pixelColor.blue());
 }
 
 } // namespace spix
