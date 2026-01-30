@@ -129,13 +129,14 @@ std::string QtItem::typeName() const
 std::vector<std::string> QtItem::childrenNames() const
 {
     std::vector<std::string> names;
-    auto children = qquickitem()->childItems();
-    for (auto* child : children) {
+    // Use ForEachChild to properly handle QQuickRepeater and other special cases
+    qt::ForEachChild(const_cast<QObject*>(qobject()), [&names](QObject* child) -> bool {
         QString name = child->objectName();
         if (!name.isEmpty()) {
             names.push_back(name.toStdString());
         }
-    }
+        return true; // continue iteration
+    });
     return names;
 }
 
