@@ -10,6 +10,7 @@
 #include <Spix/Data/Variant.h>
 
 #include <string>
+#include <vector>
 
 namespace spix {
 
@@ -32,6 +33,11 @@ public:
     virtual void setStringProperty(const std::string& name, const std::string& value) = 0;
     virtual bool invokeMethod(const std::string& method, const std::vector<Variant>& args, Variant& ret) = 0;
     virtual bool visible() const = 0;
+
+    // Element info methods for UI exploration
+    virtual std::string objectName() const = 0;
+    virtual std::string typeName() const = 0;
+    virtual std::vector<std::string> childrenNames() const = 0;
 };
 
 } // namespace spix

@@ -27,6 +27,8 @@
 #include <Commands/Screenshot.h>
 #include <Commands/SetProperty.h>
 #include <Commands/Wait.h>
+#include <Commands/GetChildrenNames.h>
+#include <Commands/GetElementInfo.h>
 
 #include <Spix/Events/Identifiers.h>
 
@@ -201,6 +203,41 @@ std::string TestServer::pickColorAt(ItemPath path, int x, int y)
 void TestServer::quit()
 {
     m_cmdExec->enqueueCommand<cmd::Quit>();
+}
+
+std::vector<std::string> TestServer::getChildrenNames(ItemPath path)
+{
+    std::promise<std::vector<std::string>> promise;
+    auto result = promise.get_future();
+    auto cmd = std::make_unique<cmd::GetChildrenNames>(path, std::move(promise));
+    m_cmdExec->enqueueCommand(std::move(cmd));
+
+    return result.get();
+}
+
+std::map<std::string, std::string> TestServer::getElementInfo(ItemPath path)
+{
+    std::promise<cmd::ElementInfo> promise;
+    auto result = promise.get_future();
+    auto cmd = std::make_unique<cmd::GetElementInfo>(path, std::move(promise));
+    m_cmdExec->enqueueCommand(std::move(cmd));
+
+    // Convert ElementInfo to map for RPC serialization
+    auto info = result.get();
+    std::map<std::string, std::string> infoMap;
+    infoMap["objectName"] = info.objectName;
+    infoMap["typeName"] = info.typeName;
+    infoMap["visible"] = info.visible ? "true" : "false";
+
+    // Serialize children as newline-separated list (safer than comma - names may contain commas)
+    std::string childrenStr;
+    for (size_t i = 0; i < info.children.size(); ++i) {
+        if (i > 0) childrenStr += "\n";
+        childrenStr += info.children[i];
+    }
+    infoMap["children"] = childrenStr;
+
+    return infoMap;
 }
 
 } // namespace spix

@@ -25,6 +25,11 @@ public:
     bool invokeMethod(const std::string& method, const std::vector<Variant>& args, Variant& ret) override;
     bool visible() const override;
 
+    // Element info methods
+    std::string objectName() const override;
+    std::string typeName() const override;
+    std::vector<std::string> childrenNames() const override;
+
     // MockItem specials
     std::map<std::string, std::string>& stringProperties();
 

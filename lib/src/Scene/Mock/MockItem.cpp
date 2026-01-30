@@ -56,4 +56,19 @@ std::map<std::string, std::string>& MockItem::stringProperties()
     return m_stringProperties;
 }
 
+std::string MockItem::objectName() const
+{
+    return "MockItem";
+}
+
+std::string MockItem::typeName() const
+{
+    return "MockItem";
+}
+
+std::vector<std::string> MockItem::childrenNames() const
+{
+    return {};
+}
+
 } // namespace spix

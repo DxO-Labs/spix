@@ -10,6 +10,7 @@
 #include <Utils/AnyRpcUtils.h>
 #include <anyrpc/anyrpc.h>
 #include <functional>
+#include <map>
 
 /**
  * Utility type traits
@@ -126,6 +127,11 @@ void callAndAssignAnyRpcResult(std::function<R(Args...)> func, anyrpc::Value& re
             for (const auto& item : funcResult) {
                 anyrpc::Value value {item};
                 result.PushBack(value);
+            }
+        } else if constexpr (is_specialization<R, std::map>::value) {
+            result.SetMap();
+            for (const auto& [key, value] : funcResult) {
+                result[key] = value;
             }
         } else if constexpr (std::is_same_v<R, Variant>) {
             result = VariantToAnyRPCValue(funcResult);

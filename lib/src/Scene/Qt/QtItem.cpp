@@ -116,4 +116,27 @@ const QObject* QtItem::qobject() const
     return std::visit([](auto i) { return static_cast<const QObject*>(i); }, m_item);
 }
 
+std::string QtItem::objectName() const
+{
+    return qobject()->objectName().toStdString();
+}
+
+std::string QtItem::typeName() const
+{
+    return qobject()->metaObject()->className();
+}
+
+std::vector<std::string> QtItem::childrenNames() const
+{
+    std::vector<std::string> names;
+    auto children = qquickitem()->childItems();
+    for (auto* child : children) {
+        QString name = child->objectName();
+        if (!name.isEmpty()) {
+            names.push_back(name.toStdString());
+        }
+    }
+    return names;
+}
+
 } // namespace spix

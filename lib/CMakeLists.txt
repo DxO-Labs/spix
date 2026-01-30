@@ -58,6 +58,10 @@ set(SOURCES
     src/Commands/ExistsAndVisible.h
     src/Commands/GetBoundingBox.cpp
     src/Commands/GetBoundingBox.h
+    src/Commands/GetChildrenNames.cpp
+    src/Commands/GetChildrenNames.h
+    src/Commands/GetElementInfo.cpp
+    src/Commands/GetElementInfo.h
     src/Commands/GetProperty.cpp
     src/Commands/GetProperty.h
     src/Commands/GetTestStatus.cpp

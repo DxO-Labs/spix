@@ -8,6 +8,7 @@
 
 #include <chrono>
 #include <functional>
+#include <map>
 #include <memory>
 #include <thread>
 
@@ -69,6 +70,10 @@ public:
     void takeScreenshot(ItemPath targetItem, std::string filePath);
     std::string pickColorAt(ItemPath path, int x, int y);
     void quit();
+
+    // Element info methods for UI exploration
+    std::vector<std::string> getChildrenNames(ItemPath path);
+    std::map<std::string, std::string> getElementInfo(ItemPath path);
 
 protected:
     virtual void executeTest() = 0;

@@ -117,6 +117,15 @@ AnyRpcServer::AnyRpcServer(int anyrpcPort)
         "Executes a generic command | command(string command, string payload)",
         [this](std::string command, std::string payload) { return genericCommand(command, payload); });
 
+    // UI exploration methods
+    utils::AddFunctionToAnyRpc<std::vector<std::string>(std::string)>(methodManager, "getChildrenNames",
+        "Get child element names | getChildrenNames(string path) : (strings) [child1, child2, ...]",
+        [this](std::string path) { return getChildrenNames(std::move(path)); });
+
+    utils::AddFunctionToAnyRpc<std::map<std::string, std::string>(std::string)>(methodManager, "getElementInfo",
+        "Get element information | getElementInfo(string path) : {objectName, typeName, visible, children}",
+        [this](std::string path) { return getElementInfo(std::move(path)); });
+
     m_pimpl->server->BindAndListen(anyrpcPort);
 }
 
