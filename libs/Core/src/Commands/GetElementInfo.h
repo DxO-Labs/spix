@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <Spix/spix_export.h>
+#include <Spix/spix_core_export.h>
 
 #include <Spix/Commands/Command.h>
 #include <Spix/Data/ItemPath.h>
@@ -29,7 +29,7 @@ struct ElementInfo {
     std::vector<std::string> children;
 };
 
-class SPIX_EXPORT GetElementInfo : public Command {
+class SPIXCORE_EXPORT GetElementInfo : public Command {
 public:
     GetElementInfo(ItemPath path, std::promise<ElementInfo> promise);
 

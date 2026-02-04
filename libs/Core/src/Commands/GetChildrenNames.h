@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <Spix/spix_export.h>
+#include <Spix/spix_core_export.h>
 
 #include <Spix/Commands/Command.h>
 #include <Spix/Data/ItemPath.h>
@@ -18,7 +18,7 @@
 namespace spix {
 namespace cmd {
 
-class SPIX_EXPORT GetChildrenNames : public Command {
+class SPIXCORE_EXPORT GetChildrenNames : public Command {
 public:
     GetChildrenNames(ItemPath path, std::promise<std::vector<std::string>> promise);
 
