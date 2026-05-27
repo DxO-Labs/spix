@@ -1,5 +1,9 @@
-add_subdirectory(Basic)
-add_subdirectory(GTest)
-add_subdirectory(ListGridView)
-add_subdirectory(RemoteCtrl)
-add_subdirectory(RepeaterLoader)
+# Examples CMakeLists.txt - Conditional example building based on available components
+
+if(SPIX_BUILD_QTQUICK)
+    add_subdirectory(qtquick)
+endif()
+
+if(SPIX_BUILD_QTWIDGETS)
+    add_subdirectory(qtwidgets)
+endif()
