@@ -36,7 +36,7 @@ struct SPIXCORE_EXPORT Rect {
     Size size;
 };
 
-struct Color {
+struct SPIXCORE_EXPORT Color {
     Color(int r, int g, int b);
 
     int r;
